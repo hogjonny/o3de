@@ -39,6 +39,9 @@ _LOGGER = _logging.getLogger(_MODULENAME)
 _LOGGER.info(f'Initializing: {_MODULENAME}')
 
 from DccScriptingInterface.globals import *
+
+import DccScriptingInterface.azpy.test.entry_test
+DccScriptingInterface.azpy.test.entry_test.connect_wing()
 # -------------------------------------------------------------------------
 
 
@@ -79,6 +82,22 @@ def export_scene_materials(args):
 
 
 # -------------------------------------------------------------------------
+def launch_validator(args):
+
+    _LOGGER.info('Starting Model Validator')
+
+    from importlib import reload
+
+    from DccScriptingInterface.Tools.DCC.Maya.Scripts.Python.validation.ui.form import Form
+    reload(Form)
+
+    form = Form('validator.ui')
+
+    return form
+# -------------------------------------------------------------------------
+
+
+# -------------------------------------------------------------------------
 def set_main_menu(obj_name=OBJ_DCCSI_MAINMENU, label=TAG_DCCSI_MAINMENU):
     _main_window = pm.language.melGlobals['gMainWindow']
 
@@ -105,11 +124,13 @@ def set_main_menu(obj_name=OBJ_DCCSI_MAINMENU, label=TAG_DCCSI_MAINMENU):
     # Conversion Section Menu Items
     pm.menuItem(label='Export Scene Materials', command=export_scene_materials)
 
-    return _custom_tools_menu
+    pm.menuItem(label='Model Validator', command=launch_validator)
 
-# ==========================================================================
-# Run as LICENSE
-#==========================================================================
+    return _custom_tools_menu
+# -------------------------------------------------------------------------
+
+
+# -------------------------------------------------------------------------
 if __name__ == '__main__':
 
     _custom_menu = set_main_menu()

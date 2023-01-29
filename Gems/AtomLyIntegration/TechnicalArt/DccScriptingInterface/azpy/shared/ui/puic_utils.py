@@ -56,12 +56,11 @@ from DccScriptingInterface.globals import *
 # The code itself has not been refactored and cleaned up, that can
 # occur in a future PR
 def from_ui_generate_form_and_base_class(filename, return_output=False):
-    """! Parse a Qt Designer .ui file and return Pyside2 Form and Base Class
-    Usage:
-            import azpy.shared.ui as azpyui
-            form_class, base_class = azpyui.from_ui_generate_form_and_class(r'C:\my\filepath\tool.ui')
+    """! @brief: Parse a Qt Designer .ui file and return Pyside2 Form and Base Class
 
-    To Do: write a proper doxygen formated docstring
+    Usage:
+            import azpy.shared.ui as ui
+            form_class, base_class = ui.from_ui_generate_form_and_class(r'C:\my\filepath\tool.ui')
     """
     ui_file = Path(filename)
     output = ''
@@ -104,7 +103,7 @@ def from_ui_generate_form_and_base_class(filename, return_output=False):
         # compile the .pyc bytecode from stream
         pyc = compile(stream.getvalue(), '', 'exec')
         # execute the .pyc bytecode
-        exec (pyc, frame)
+        exec(pyc, frame)
 
         # Retreive the form_class and base_class based on type in designer .ui (xml)
         form_class = frame['Ui_{0}'.format(form_class)]
@@ -147,5 +146,5 @@ if __name__ == '__main__':
     # can run local tests
     if DCCSI_TESTS: # from DccScriptingInterface.globals
         # this will validate pyside bootstrapping
-        foo = dccsi_core_config.test_pyside2(exit = False)
+        foo = dccsi_core_config.test_pyside2(exit=False)
         pass

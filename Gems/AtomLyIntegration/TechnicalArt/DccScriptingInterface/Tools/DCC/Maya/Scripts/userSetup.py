@@ -51,7 +51,7 @@ sys.path.insert(0, str(PATH_O3DE_TECHART_GEMS))
 
 from DccScriptingInterface import PATH_DCCSI_PYTHON_LIB
 # 3rdparty
-from unipath import Path
+from unipath import Path  # modules should be re-written with Pathlib
 from box import Box
 # -------------------------------------------------------------------------
 
@@ -77,7 +77,7 @@ from DccScriptingInterface.globals import *
 from azpy.constants import FRMT_LOG_LONG
 _logging.basicConfig(level=_logging.DEBUG,
                      format=FRMT_LOG_LONG,
-                    datefmt='%m-%d %H:%M')
+                     datefmt='%m-%d %H:%M')
 
 _LOGGER = _logging.getLogger(_MODULENAME)
 
@@ -120,45 +120,45 @@ _LOGGER.info(f'DCCSI_MAYA_SET_CALLBACKS: {_G_LOAD_CALLBACKS}.')
 #_G_DEBUGGER = os.getenv(ENVAR_DCCSI_GDEBUGGER, "WING")
 
 #if _DCCSI_DEV_MODE:
-    #if _G_DEBUGGER == "WING":
-        #_LOGGER.info('{0}'.format('-' * 74))
-        #_LOGGER.info('Developer Debug Mode: {0}, Basic debugger: {1}'.format(_G_DEBUG, _G_DEBUGGER))
-        #try:
-            #_LOGGER.info('Attempting to start basic WING debugger')
-            #import azpy.lmbr.test
+#if _G_DEBUGGER == "WING":
+#_LOGGER.info('{0}'.format('-' * 74))
+#_LOGGER.info('Developer Debug Mode: {0}, Basic debugger: {1}'.format(_G_DEBUG, _G_DEBUGGER))
+#try:
+#_LOGGER.info('Attempting to start basic WING debugger')
+#import azpy.lmbr.test
 
-            #_LOGGER.info('Package Imported: azpy.test')
-            #ouput = azpy.entry_test.main(verbose=False,
-                                         #connectDebugger=True,
-                                         #returnOuput=_G_DEBUG)
-            #_LOGGER.info(ouput)
-            #pass
-        #except Exception as e:
-            #_LOGGER.info("Error: azpy.test, entry_test (didn't perform)")
-            #_LOGGER.info("Exception: {0}".format(e))
-        #pass
-    #elif _G_DEBUGGER == "PYCHARM":
-        ## https://github.com/juggernate/PyCharm-Maya-Debugging
-        #_LOGGER.info('{0}'.format('-' * 74))
-        #_LOGGER.info('Developer Debug Mode: {0}, Basic debugger: {1}'.format(_G_DEBUG, _G_DEBUGGER))
-        #sys.path.append('C:\Program Files\JetBrains\PyCharm 2019.1.3\debug-eggs\pydevd-pycharm.egg')
-        #try:
-            #_LOGGER.info('Attempting to start basic PYCHARM debugger')
-            ## Inside Maya Python Console (Tip: add to a shelf button for quick access)
-            #import pydevd
+#_LOGGER.info('Package Imported: azpy.test')
+#ouput = azpy.entry_test.main(verbose=False,
+#connectDebugger=True,
+#returnOuput=_G_DEBUG)
+#_LOGGER.info(ouput)
+#pass
+#except Exception as e:
+#_LOGGER.info("Error: azpy.test, entry_test (didn't perform)")
+#_LOGGER.info("Exception: {0}".format(e))
+#pass
+#elif _G_DEBUGGER == "PYCHARM":
+## https://github.com/juggernate/PyCharm-Maya-Debugging
+#_LOGGER.info('{0}'.format('-' * 74))
+#_LOGGER.info('Developer Debug Mode: {0}, Basic debugger: {1}'.format(_G_DEBUG, _G_DEBUGGER))
+#sys.path.append('C:\Program Files\JetBrains\PyCharm 2019.1.3\debug-eggs\pydevd-pycharm.egg')
+#try:
+#_LOGGER.info('Attempting to start basic PYCHARM debugger')
+## Inside Maya Python Console (Tip: add to a shelf button for quick access)
+#import pydevd
 
-            #_LOGGER.info('Package Imported: pydevd')
-            #pydevd.settrace('localhost', port=7720, suspend=False)
-            #_LOGGER.info('PYCHARM Debugger Attach Success!!!')
-            ## To disconnect run:
-            ## pydevd.stoptrace()
-            #pass
-        #except Exception as e:
-            #_LOGGER.info("Error: pydevd.settrace (didn't perform)")
-            #_LOGGER.info("Exception: {0}".format(e))
-        #pass
-    #else:
-        #pass
+#_LOGGER.info('Package Imported: pydevd')
+#pydevd.settrace('localhost', port=7720, suspend=False)
+#_LOGGER.info('PYCHARM Debugger Attach Success!!!')
+## To disconnect run:
+## pydevd.stoptrace()
+#pass
+#except Exception as e:
+#_LOGGER.info("Error: pydevd.settrace (didn't perform)")
+#_LOGGER.info("Exception: {0}".format(e))
+#pass
+#else:
+#pass
 ## -------------------------------------------------------------------------
 
 
