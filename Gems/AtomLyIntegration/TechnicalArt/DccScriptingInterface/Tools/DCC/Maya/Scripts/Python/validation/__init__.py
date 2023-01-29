@@ -6,11 +6,19 @@
 #
 #
 # -------------------------------------------------------------------------
+"""! An O3DE Maya Scene Validation Util
+
+:file:
+    <DCCsi>\\Tools\\DCC\\Maya\\Scripts\Python\Validation\__init__.py
+:Status: Prototype
+:Version: 0.0.1
+"""
+
 # standard imports
 import logging as _logging
 
-from DccScriptingInterface.Tools.DCC.Maya.Scripts import _PACKAGENAME
-_PACKAGENAME = f'{_PACKAGENAME}.Python'
+from DccScriptingInterface.Tools.DCC.Maya.Scripts.Python import _PACKAGENAME
+_PACKAGENAME = f'{_PACKAGENAME}.validation'
 _LOGGER = _logging.getLogger(_PACKAGENAME)
 
-__all__ = ['export', 'validation']
+__all__ = ['validator', 'ui']

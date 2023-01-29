@@ -1,14 +1,94 @@
-# DccScriptingInterface ( aka DCCsi )
+# DccScriptingInterface Gem ( aka DCCsi )
 
 ###### Status: Prototype
 
 ###### Version: 0.0.1
 
-###### Support: Wing Pro 8+, currently Windows only
+###### Support: Currently Windows Only
 
-The *DccScriptingInterface* is a Gem for O3DE to extend and interface with dcc tools in the python ecosystem. Each dcc tool may have it's own specific version of python, most are some version of py3+. O3DE provides an install of py3+ and manages package dependencies with requirements.txt files and the cmake build system.
+The *DccScriptingInterface* is a Gem for Open 3D Engine (O3DE) to extend and interface with dcc tools in the python ecosystem. Each dcc tool may have it's own specific version of python, most are some version of py3+. O3DE provides an install of py3+ and manages package dependencies with requirements.txt files and the cmake build system.
 
-## What is the DCCsi?
+## TL/DR
+
+The DccScriptingInterface Gem (Dccsi) provides a framework for tool integrations for Technical Artists, such as Digital Content Creation apps (DCC) or Integrated Development Environments (IDE) for coding python.  It manages the enviornment, configuration, launch and boostrapping of these tools to work with O3DE.
+
+### Requirements:
+
+1. O3DE is a requirement, we utilize it's Python and some core (libs, dll's)
+
+2. We suggest that you do these things *<u>before</u>* you start trying to use the DCCsi or content tools. This ensures all dependancies are installed, configured, etc.:
+   
+   1. Install or build the engine
+   
+   2. Configure your project (even if it's AutomatedTesting)
+   
+   3. Enabled the DccScriptingInterface Gem in your project
+   
+   4. Build your project
+   
+   5. Configure your DCC tools
+      
+      1. Non-installer, Not-default install path, Non-default build (building from source), you need to specify the PATH_O3DE_BIN
+      
+      2. <u>Using win .bat env</u>
+         
+         
+         
+         Copy this file: "C:\path\to\o3de\Gems\AtomLyIntegration\TechnicalArt\DccScriptingInterface\Tools\Dev\Windows\Env_Dev.bat.example"
+         
+         1. Rename as: Env_Dev.bat
+         
+         2. Alter the contents, specify/overrides the paths (to match your cmake build configuration:
+         
+         3. set "O3DE_DEV=C:\depot\o3de-dev" (the enginesource root, your source clone repo path)
+         
+         4. set "PATH_O3DE_BIN=%O3DE_DEV%\build\bin\profile" (the nested bin folder)
+      
+      3. <u>Using script</u> config.py, settings.local.json, start.py (use a win CMD)
+         
+         1. Copy this file: "C:\path\to\o3de\Gems\AtomLyIntegration\TechnicalArt\DccScriptingInterface\settings.local.json.example"
+         
+         2. Rename as: settings.local.json
+         
+         3. 
+
+3. O3DE must be fullfilled in one of these ways:
+   
+   1. The engine in installed: [Download Open 3D Engine - Open 3D Engine](https://www.o3de.org/download/)
+      
+      1. Or[ Nightly Dev Build](https://o3debinaries.org/development/Latest/Windows/o3de_installer.exe)
+   
+   2. Or the engine must be [cloned AND built source]([Configure and Build - Open 3D Engine](https://www.o3de.org/docs/user-guide/build/configure-and-build/))
+      
+      1. [System and Build Requirments]([O3DE System Requirements - Open 3D Engine](https://www.o3de.org/docs/welcome-guide/requirements/)) (visual studio needs to be configured)
+   
+   3. **Note: If the engine is not built, some pyhton modules may fail, or cause DCC applications to noth start or function correctly.** 
+      
+      1. For example, we utilize the o3de python interpretter, and it's package dependancies are installed during the build process.
+      
+      2. Additionally, the DCCsi package dependancies are installed at build time (pkgs are installed during cmake configuration using Gems requirements.txt)
+      
+      3. Add the DCCsi code may also run in DCC tools, so they need to be configured and have access to pkg dependancies as well.
+
+4. Each DCC application may need to be configured, for instance to install python pkg dependancies:
+   
+   1. See the section **<u>Foundation.py</u>** below in this doc
+   
+   2. Check the readme.md for instructions for each tool (for example):
+      
+      1. DccScriptingInterface\Tools\DCC\Maya\\readme.md
+      
+      2. DccScriptingInterface\Tools\DCC\Blender\readme.md
+      
+      3. DccScriptingInterface\Tools\DCC\* (others)
+      
+      4. DccScriptingInterface\Tools\IDE\Wing\readme.md
+      
+      5. DccScriptingInterface\Tools\IDE\* (others)
+
+5. If you encounter issues get on discord, and/or start a github Issue please.  Mark these tickets with the label *feature\techart*
+
+# What is the DCCsi?
 
 - A shared Development Environment for technical art.
 - Leverage the existing Python Ecosystem for technical art.
@@ -16,7 +96,7 @@ The *DccScriptingInterface* is a Gem for O3DE to extend and interface with dcc t
 - Integrate a DCC app like Substance (or Substance SAT api) from the Python driven VFX and Games ecosystem.
 - Extend O3DE and unlock its potential for content creators, and the Technical Artists that service them.
 
-### Tenets:
+## Tenets:
 
 1. Interoperability: Design DCC-agnostic modules and DCC-bespoke modules  to work together along with O3DE efficiently and intuitively.
 
@@ -30,7 +110,7 @@ The *DccScriptingInterface* is a Gem for O3DE to extend and interface with dcc t
 
 3. Extensibility: Design the tool set to be easily extensible with new functionality, along with new utilities and functionality.  Individual pieces should have a generic communication mechanism to allow newly written tools to slot cleanly and transparently into the tool chain.
 
-### What is provided (High Level):
+## What is provided (High Level):
 
 DCC-Agnostic Python Framework (as a modular Gem) related to multiple integrations for:
 

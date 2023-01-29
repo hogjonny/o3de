@@ -25,7 +25,7 @@ DCCSI_INFO = {
         'include': ('win'),   # windows
         'exclude': ('darwin', # mac
                     'linux')  # linux, linux_x64
-        }),
+    }),
     "doc_url": DCCSI_DOCS_URL
 }
 import timeit
@@ -103,6 +103,7 @@ def pathify_list(path_list):
 
     return new_path_list
 
+
 def add_site_dir(site_dir):
     """Add a site package and moves to front of sys.path"""
 
@@ -120,6 +121,7 @@ def add_site_dir(site_dir):
             sys.path.insert(0, str(p))
 
     return site_dir
+
 
 def get_key_value(in_dict: dict, in_key: str):
     for key, value in in_dict.items():
@@ -167,11 +169,11 @@ except NotADirectoryError as e:
 ENVAR_PATH_DCCSI_PYTHON_LIB = 'PATH_DCCSI_PYTHON_LIB'
 
 # a str path constructor for the dccsi 3rdPary site-dir
-STR_DCCSI_PYTHON_LIB = (f'{PATH_DCCSIG.as_posix()}' +
-                        f'\\3rdParty\\Python\\Lib' +
-                        f'\\{sys.version_info[0]}.x' +
-                        f'\\{sys.version_info[0]}.{sys.version_info[1]}.x' +
-                        f'\\site-packages')
+STR_DCCSI_PYTHON_LIB = (f'{PATH_DCCSIG.as_posix()}'
+                        + f'\\3rdParty\\Python\\Lib'
+                        + f'\\{sys.version_info[0]}.x'
+                        + f'\\{sys.version_info[0]}.{sys.version_info[1]}.x'
+                        + f'\\site-packages')
 # build path
 PATH_DCCSI_PYTHON_LIB = Path(STR_DCCSI_PYTHON_LIB)
 
@@ -185,8 +187,8 @@ try:
     add_site_dir(PATH_DCCSI_PYTHON_LIB)
     _LOGGER.debug(f'{ENVAR_PATH_DCCSI_PYTHON_LIB} is: {PATH_DCCSI_PYTHON_LIB.as_posix()}')
 except NotADirectoryError as e:
-    _LOGGER.warning(f'{ENVAR_PATH_DCCSI_PYTHON_LIB} does not exist:' +
-                    f'{PATH_DCCSI_PYTHON_LIB.as_Posix()}')
+    _LOGGER.warning(f'{ENVAR_PATH_DCCSI_PYTHON_LIB} does not exist:'
+                    + f'{PATH_DCCSI_PYTHON_LIB.as_Posix()}')
     _LOGGER.warning(f'Pkg dependencies may not be available for import')
     _LOGGER.warning(f'Try using foundation.py to install pkg dependencies for the target python runtime')
     PATH_DCCSI_PYTHON_LIB = None
@@ -251,14 +253,14 @@ ENVAR_PROGRAMFILES_X64 = 'PROGRAMFILES'
 PATH_PROGRAMFILES_X64 = os.environ[ENVAR_PROGRAMFILES_X64]
 
 # path string constructor, dccsi default WINGHOME location
-PATH_WINGHOME = (f'{PATH_PROGRAMFILES_X86}' +
-                 f'\\{SLUG_DCCSI_WING_TYPE} {SLUG_DCCSI_WING_VERSION_MAJOR}')
+PATH_WINGHOME = (f'{PATH_PROGRAMFILES_X86}'
+                 + f'\\{SLUG_DCCSI_WING_TYPE} {SLUG_DCCSI_WING_VERSION_MAJOR}')
 
 # path string constructor, userhome where wingstubdb.py can live
-PATH_WING_APPDATA = (f'{USER_HOME}' +
-                     f'\\AppData' +
-                     f'\\Roaming' +
-                     f'\\{SLUG_DCCSI_WING_TYPE} {str(SLUG_DCCSI_WING_VERSION_MAJOR)}')
+PATH_WING_APPDATA = (f'{USER_HOME}'
+                     + f'\\AppData'
+                     + f'\\Roaming'
+                     + f'\\{SLUG_DCCSI_WING_TYPE} {str(SLUG_DCCSI_WING_VERSION_MAJOR)}')
 # -------------------------------------------------------------------------
 
 
@@ -654,7 +656,12 @@ if not PATH_O3DE_BIN:
 if PATH_O3DE_BIN:
     PATH_O3DE_BIN = Path(PATH_O3DE_BIN)
     try:
-        PATH_O3DE_BIN = PATH_O3DE_BIN.resolve(strict=True)
+        PATH_O3DE_BIN = PATH_O3DE_BIN.resolve()
+        # the above can fail is the engine is not built, no bin folder to find.
+        # if a developer cloned the repo but hasn't built the engine yet...
+        # # FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Depot\\o3de\\bin\\Windows\\profile\\Default'
+        # ^ this follows the default path for installed builds, not source.
+        # we can make these non-strict, however then some modules could fail
         add_site_dir(PATH_O3DE_BIN)
     except NotADirectoryError as e:
         _LOGGER.warning(f'{ENVAR_PATH_O3DE_BIN} may not exist: {PATH_O3DE_BIN.as_posix()}')
@@ -665,7 +672,7 @@ if PATH_O3DE_BIN:
             raise e
 
     try:
-        PATH_O3DE_BIN.resolve(strict=True)
+        PATH_O3DE_BIN.resolve()
     except Exception as e:
         _LOGGER.warning(f'{ENVAR_PATH_O3DE_BIN} not defined: {PATH_O3DE_BIN}')
         _LOGGER.warning(f'Put "set {ENVAR_PATH_O3DE_BIN}=C:\\path\\to\\o3de" in: {PATH_ENV_DEV}')
@@ -737,9 +744,9 @@ if DCCSI_TEST_PYSIDE:
         QT_PLUGIN_PATH = Path(PATH_O3DE_3RDPARTY,
                               'packages',
                               'pyside2-5.15.2.1-py3.10-rev3-windows',
-                                'pyside2',
-                                'lib',
-                                'site-packages')
+                              'pyside2',
+                              'lib',
+                              'site-packages')
 
     try:
         QT_PLUGIN_PATH = QT_PLUGIN_PATH.resolve(strict=True)
@@ -789,7 +796,7 @@ try:
     from dynaconf import LazySettings
 except ImportError as e:
     _LOGGER.error(f'Could not import dynaconf')
-    _LOGGER.info(f'Most likely python package dependencies are not installed for target runtime')
+    _LOGGER.warning(f'Most likely python package dependencies are not installed for target runtime')
     _LOGGER.info(f'Py EXE  is:  {sys.executable}')
     _LOGGER.info(f'The Python version running: {sys.version_info[0]}.{sys.version_info[1]}')
     _LOGGER.info(f'{ENVAR_PATH_DCCSI_PYTHON_LIB} location is: {PATH_DCCSI_PYTHON_LIB}')
@@ -797,8 +804,14 @@ except ImportError as e:
     _LOGGER.info(f'1. open a cmd prompt')
     _LOGGER.info(f'2. change directory to: {PATH_DCCSIG}')
     _LOGGER.info(f'3. run this command...')
-    _LOGGER.info(f'4. >python foundation.py -py="{sys.executable}"')
-    _LOGGER.error(f'{e} , traceback =', exc_info = True)
+    # this can be hit if you are trying to start dcc app (maya.exe), or a python
+    # interpretter (mayapy.exe). Foundation, needs to run on the python
+    # interpretter, so this needs to be more generic or we may be instructing
+    # the user to run the wrong command (foundation.py will not work with
+    # maya.exe, only mayapy.exe)
+    _LOGGER.info(f'4. >python foundation.py -py="c:\\path\\to\\programs\\<app>\\<app bin folder>\\<app python>.exe"')
+    _LOGGER.info(f'5. for reference, the path to the exe you ran is: {sys.executable}')
+    _LOGGER.error(f'{e} , traceback =', exc_info=True)
     pass # be forgiving
 
 # settings = LazySettings(
